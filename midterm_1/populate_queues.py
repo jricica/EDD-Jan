@@ -1,7 +1,13 @@
 from find_n import find_n
 from linear_queue import LinearQueue
 import time
-from memory_profiler import memory_usage
+import psutil
+import os
+
+def get_memory_usage():
+    """Obtiene el uso de memoria actual del proceso en MiB."""
+    process = psutil.Process(os.getpid())
+    return process.memory_info().rss / (1024 * 1024)  # Convertir bytes a MiB
 
 def main():
     # Obtener el tamaño n
@@ -19,20 +25,24 @@ def main():
     for i, size in enumerate(sizes):
         queue = LinearQueue(size)
         
-        # Medir tiempo y memoria antes de llenar la cola
+        # Medir memoria antes de cargar la cola
+        mem_before = get_memory_usage()
+
+        # Medir tiempo antes de cargar la cola
         start_time = time.perf_counter()
         
         # Cargar los elementos de a uno
-        def _enqueue_operations():
-            for i in range(size):
-                queue.enqueue(str(i))  
+        for j in range(size):
+            queue.enqueue(str(j))  
 
-        # Medir el uso de memoria y tiempo
-        mem_usage = memory_usage((_enqueue_operations,), max_usage=True, interval=0.01)
+        # Medir tiempo después de cargar la cola
         tiempo_total = time.perf_counter() - start_time
-        
+
+        # Medir memoria después de cargar la cola
+        mem_after = get_memory_usage()
+
         # Imprimir el resultado con tiempo y memoria
-        print(f"Queue {i + 1} (Size {size}): {size} time = {tiempo_total:.4f} ; memory = {mem_usage:.2f} MiB")
+        print(f"Queue {i + 1} (Size {size}): {size} time = {tiempo_total:.4f} ; memory = {mem_after - mem_before:.2f} MiB")
 
 if __name__ == '__main__':
     main()
