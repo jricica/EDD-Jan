@@ -3,7 +3,7 @@ import numpy as np
 import collections
 
 class VideoBuffer:
-    def __init__(self, size=30):
+    def __init__(self, size=10):
         self.buffer = collections.deque(maxlen=size)  # Cola con tamaño fijo
         self.size = size
 
@@ -21,7 +21,7 @@ class VideoBuffer:
             
             key = cv2.waitKey(0)  # Esperar a que el usuario presione una tecla
             
-            if key == ord('q'):  # Salir si presiona 'q'
+            if key == ord('q'):  
                 print("Cerrando video.")
                 break
 
@@ -29,6 +29,6 @@ class VideoBuffer:
 
 
 # 🔥 Simulación del buffer de vídeo
-buffer = VideoBuffer(size=30)
+buffer = VideoBuffer(size=10)
 buffer.generate_frames()
 buffer.play_video()
