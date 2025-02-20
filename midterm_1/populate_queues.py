@@ -1,48 +1,28 @@
-from find_n import find_n
+# populate_queues.py
 from linear_queue import LinearQueue
-import time
-import psutil
-import os
+from find_n import find_n
 
-def get_memory_usage():
-    """Obtiene el uso de memoria actual del proceso en MiB."""
-    process = psutil.Process(os.getpid())
-    return process.memory_info().rss / (1024 * 1024)  # Convertir bytes a MiB
+def populate_queues(n):
+    # Crear las instancias de las colas
+    queues = {
+        'n': LinearQueue(n),
+        '2n': LinearQueue(2 * n),
+        '3n': LinearQueue(3 * n),
+        '4n': LinearQueue(4 * n),
+        '5n': LinearQueue(5 * n)
+    }
 
-def main():
-    # Obtener el tamaño n
-    n = find_n()
-    print(f"Valor de n: {n}")  # Se imprime solo una vez al principio
+    # Poblar cada cola con elementos
+    for key, queue in queues.items():
+        for i in range(queue.max):
+            queue.enqueue(f'Element-{i}')  # Usamos un string como elemento
 
-    # Verificar que n sea positivo
-    if n <= 0:
-        raise ValueError("El tamaño n debe ser un número positivo.")
+    return queues
 
-    # Asegurarse de que los tamaños sean exactamente n, 2n, 3n, 4n, 5n
-    sizes = [n * i for i in range(1, 6)]  
-    print(f"Tamaños de las colas: {sizes}")  # Imprime los tamaños de las colas solo una vez
+if __name__ == "__main__":
+    n = find_n()  # Llamar a la función find_n para obtener el valor de n
+    queues = populate_queues(n)
 
-    for i, size in enumerate(sizes):
-        queue = LinearQueue(size)
-        
-        # Medir memoria antes de cargar la cola
-        mem_before = get_memory_usage()
-
-        # Medir tiempo antes de cargar la cola
-        start_time = time.perf_counter()
-        
-        # Cargar los elementos de a uno
-        for j in range(size):
-            queue.enqueue(str(j))  
-
-        # Medir tiempo después de cargar la cola
-        tiempo_total = time.perf_counter() - start_time
-
-        # Medir memoria después de cargar la cola
-        mem_after = get_memory_usage()
-
-        # Imprimir el resultado con tiempo y memoria
-        print(f"Queue {i + 1} (Size {size}): {size} time = {tiempo_total:.4f} ; memory = {mem_after - mem_before:.2f} MiB")
-
-if __name__ == '__main__':
-    main()
+    # Imprimir solo el tamaño de cada cola
+    for key, queue in queues.items():
+        print(f'{key} size: {queue.max}')

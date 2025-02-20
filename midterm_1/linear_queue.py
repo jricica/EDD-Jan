@@ -34,8 +34,8 @@ class LinearQueue:
 
         return val
 
-    def search(self, key: str) -> int:
+    def search(self, key: str) -> bool:  # Cambiar el tipo de retorno a bool
         for index in range(self.front, self.rear + 1):
             if self.elements[index] == key:
-                return index
-        return -1  # Retorna -1 si no se encuentra el elemento
+                return True  # Retorna True si se encuentra el elemento
+        return False  # Retorna False si no se encuentra el elemento
