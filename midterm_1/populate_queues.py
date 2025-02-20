@@ -1,7 +1,7 @@
 # populate_queues.py
 from linear_queue import LinearQueue
 
-n = 
+n = 1024000
 def populate_queues(n):
     # Crear las instancias de las colas
     queues = {
