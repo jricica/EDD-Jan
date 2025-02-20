@@ -1,5 +1,5 @@
 # linear_queue.py
-
+from memory_profiler import profile
 class LinearQueue:
     def __init__(self, size: int):
         self.max = size
@@ -33,8 +33,8 @@ class LinearQueue:
         self.front += 1
 
         return val
-
-    def search(self, key: str) -> bool:  # Cambiar el tipo de retorno a bool
+@profile   
+def search(self, key: str) -> bool:  # Cambiar el tipo de retorno a bool
         for index in range(self.front, self.rear + 1):
             if self.elements[index] == key:
                 return True  # Retorna True si se encuentra el elemento

@@ -19,3 +19,4 @@ def find_n():
         attempts += 1  # Incrementar el contador de intentos
 
     return n  # Retornar el último valor de n si no se alcanzó el tiempo
+print(find_n())
