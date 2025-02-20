@@ -1,41 +1,54 @@
-# profile_operations.py
-import cProfile
-import pstats
-from populate_queues import populate_queues  # Importar la función populate_queues
+from memory_profiler import profile
+from linear_queue import LinearQueue
 from find_n import find_n
+import time
 
-def profile_operations():
+def populate_queues(n):
+    """Crea colas con tamaños n, 2n, 3n, 4n, 5n y las llena de elementos."""
+    queues = {
+        'n': LinearQueue(n),
+        '2n': LinearQueue(2 * n),
+        '3n': LinearQueue(3 * n),
+        '4n': LinearQueue(4 * n),
+        '5n': LinearQueue(5 * n)
+    }
+
+    # Poblar cada cola con elementos
+    for key, queue in queues.items():
+        for i in range(queue.max):
+            queue.enqueue(f'Element-{i}')  # Usamos un string como elemento
+
+    return queues
+
+# Agregar decoradores para perfilado
+
+def run_search_n(queue):
+    """Ejecutar búsqueda en la cola de tamaño n"""
+    print(f"Searching in queue of size {queue.max}")
+    queue.search("Element-NOT-FOUND")  # Buscar un elemento que no existe
+    time.sleep(1)  # Pausa de 1 segundo
+
+def run_dequeue_n(queue):
+    """Ejecutar operación dequeue en la cola de tamaño n"""
+    print(f"Dequeue in queue of size {queue.max}")
+    queue.dequeue()  # Eliminar un elemento
+    time.sleep(1)  # Pausa de 1 segundo
+
+def run_all_tests(queues):
+    """Ejecutar todas las pruebas de búsqueda y eliminación."""
+    
+    # Realizar las 5 pruebas de search
+    for key, queue in queues.items():
+        run_search_n(queue)  # Buscar un elemento que no existe en la cola
+        
+    # Realizar las 5 pruebas de dequeue
+    for key, queue in queues.items():
+        run_dequeue_n(queue)  # Eliminar un elemento de la cola
+
+if __name__ == "_main_":
     n = find_n()  # Llamar a la función find_n para obtener el valor de n
-    queues = populate_queues(n)  # Llamar a populate_queues para llenar las colas
+    queues = populate_queues(n)  # Poblar las colas
 
-    # Definir un elemento que no existe en las colas
-    non_existent_element = 'Element-999999'
-
-    # Perfilando la búsqueda de un elemento que no existe
-    print("Profiling search for a non-existent element:")
-    profiler = cProfile.Profile()
-    profiler.enable()
-    
-    for key, queue in queues.items():
-        queue.search(non_existent_element)
-    
-    profiler.disable()
-    stats = pstats.Stats(profiler)
-    stats.sort_stats('cumulative')
-    stats.print_stats()
-
-    # Perfilando la operación de dequeue
-    print("\nProfiling dequeue operation:")
-    profiler = cProfile.Profile()
-    profiler.enable()
-    
-    for key, queue in queues.items():
-        queue.dequeue()  # Realiza una operación de dequeue
-    
-    profiler.disable()
-    stats = pstats.Stats(profiler)
-    stats.sort_stats('cumulative')
-    stats.print_stats()
-
-if __name__ == "__main__":
-    profile_operations()
+    print("Starting all tests...")
+    run_all_tests(queues)  # Ejecutar todas las prueba
+    print("All tests completed!")  # Imprimir mensaje de finalización   

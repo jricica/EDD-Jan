@@ -1,7 +1,7 @@
 # populate_queues.py
 from linear_queue import LinearQueue
-from find_n import find_n
 
+n = 
 def populate_queues(n):
     # Crear las instancias de las colas
     queues = {
@@ -20,7 +20,7 @@ def populate_queues(n):
     return queues
 
 if __name__ == "__main__":
-    n = find_n()  # Llamar a la función find_n para obtener el valor de n
+    
     queues = populate_queues(n)
 
     # Imprimir solo el tamaño de cada cola
