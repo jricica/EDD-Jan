@@ -40,15 +40,16 @@ def run_all_tests(queues):
     # Realizar las 5 pruebas de search
     for key, queue in queues.items():
         run_search_n(queue)  # Buscar un elemento que no existe en la cola
-        
+    
     # Realizar las 5 pruebas de dequeue
     for key, queue in queues.items():
         run_dequeue_n(queue)  # Eliminar un elemento de la cola
 
-if __name__ == "_main_":
-    n = find_n()  # Llamar a la función find_n para obtener el valor de n
-    queues = populate_queues(n)  # Poblar las colas
+if __name__ == "__main__":
+    # Encontrar el valor de n
+    n = find_n()
+    print(f"Value of n: {n}")
+    queues = populate_queues(n)
 
     print("Starting all tests...")
-    run_all_tests(queues)  # Ejecutar todas las prueba
-    print("All tests completed!")  # Imprimir mensaje de finalización   
+    run_all_tests(queues)
